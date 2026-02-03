@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Space Text World — MMO про космос в Telegram</title>
+  <meta name="description" content="Новая Telegram MMO про космос: планета, экспедиции, корабли, альянсы. Играй прямо в мессенджере.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --space-dark: #060a12;
+      --space-mid: #0d1220;
+      --space-card: rgba(18, 28, 45, 0.85);
+      --accent: #00d4ff;
+      --accent-warm: #a78bfa;
+      --accent-soft: rgba(0, 212, 255, 0.2);
+      --star: #e8f4fc;
+      --text: #e8eef5;
+      --text-muted: #8a9fb5;
+      --border: rgba(255, 255, 255, 0.06);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Exo 2', sans-serif;
+      background: var(--space-dark);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Фон: градиент + звёзды */
+    .bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .bg-gradient {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0, 212, 255, 0.12) 0%, transparent 50%),
+        radial-gradient(ellipse 60% 40% at 80% 60%, rgba(167, 139, 250, 0.08) 0%, transparent 45%),
+        radial-gradient(ellipse 50% 30% at 20% 80%, rgba(0, 212, 255, 0.06) 0%, transparent 40%);
+    }
+    .stars {
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      top: -50%;
+      left: -50%;
+      background-image:
+        radial-gradient(2px 2px at 20px 30px, var(--star), transparent),
+        radial-gradient(2px 2px at 60px 90px, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1px 1px at 100px 50px, var(--star), transparent),
+        radial-gradient(2px 2px at 150px 120px, rgba(255,255,255,0.5), transparent),
+        radial-gradient(1px 1px at 200px 80px, var(--star), transparent);
+      background-size: 220px 220px;
+      animation: twinkle 6s ease-in-out infinite;
+      opacity: 0.7;
+    }
+    .stars::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background-size: 280px 280px;
+      background-image:
+        radial-gradient(1px 1px at 50px 80px, var(--star), transparent),
+        radial-gradient(2px 2px at 180px 40px, rgba(255,255,255,0.6), transparent);
+      animation: twinkle 8s ease-in-out infinite reverse;
+      animation-delay: -2s;
+      opacity: 0.5;
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 1.5rem 4rem;
+    }
+
+    /* Hero */
+    .hero {
+      min-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 4rem 0 3rem;
+    }
+    .hero-badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards;
+    }
+    .logo {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2rem, 6vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #fff 0%, var(--accent) 40%, var(--accent-warm) 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.75rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.1s forwards;
+    }
+    .tagline {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      font-weight: 300;
+      color: var(--text-muted);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.2s forwards;
+    }
+    .hero-desc {
+      font-size: 1.15rem;
+      line-height: 1.8;
+      color: var(--text);
+      max-width: 520px;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.3s forwards;
+    }
+    .hero-cta {
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.5s forwards;
+    }
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Кнопка CTA */
+    .btn-play {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      color: var(--space-dark);
+      background: linear-gradient(135deg, var(--accent) 0%, #0ea5e9 100%);
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 28px var(--accent-soft), 0 4px 14px rgba(0,0,0,0.3);
+      transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+    }
+    .btn-play:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 0 40px rgba(0, 212, 255, 0.4), 0 6px 20px rgba(0,0,0,0.35);
+      filter: brightness(1.05);
+    }
+    .btn-play:active {
+      transform: translateY(0) scale(0.98);
+    }
+    .btn-play svg {
+      width: 22px;
+      height: 22px;
+      fill: currentColor;
+    }
+
+    /* Секция: как играть */
+    .section {
+      padding: 3rem 0;
+    }
+    .section-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+    .step {
+      text-align: center;
+      padding: 1.5rem 1rem;
+      background: var(--space-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      backdrop-filter: blur(8px);
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .step:hover {
+      border-color: rgba(0, 212, 255, 0.25);
+      transform: translateY(-2px);
+    }
+    .step-num {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+    .step-text {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* Карточки фич */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 3rem;
+    }
+    .feature-card {
+      padding: 1.5rem;
+      background: var(--space-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      backdrop-filter: blur(8px);
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .feature-card:hover {
+      border-color: rgba(0, 212, 255, 0.2);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+    }
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 0.75rem;
+      line-height: 1;
+    }
+    .feature-title {
+      font-weight: 600;
+      font-size: 1.05rem;
+      color: var(--text);
+      margin-bottom: 0.35rem;
+    }
+    .feature-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Финальный CTA */
+    .cta-section {
+      text-align: center;
+      padding: 3rem 2rem;
+      background: linear-gradient(180deg, transparent 0%, rgba(0, 212, 255, 0.06) 50%, transparent 100%);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      margin-top: 2rem;
+    }
+    .cta-section .section-title {
+      margin-bottom: 0.75rem;
+    }
+    .cta-text {
+      font-size: 1rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .cta-section .btn-play {
+      font-size: 1.1rem;
+      padding: 1.1rem 2.2rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 0;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg">
+    <div class="bg-gradient"></div>
+    <div class="stars"></div>
+  </div>
+
+  <div class="wrap">
+    <header class="hero">
+      <p class="hero-badge">Telegram · MMO</p>
+      <h1 class="logo">Space Text World</h1>
+      <p class="tagline">Новая MMO про космос</p>
+      <p class="hero-desc">
+        Исследуй планету, строй корабли, отправляйся в экспедиции и сражайся за альянс — всё прямо в Telegram. Без установки, без лишней регистрации.
+      </p>
+      <div class="hero-cta">
+        <a href="https://t.me/SpacetextworldBot" class="btn-play" id="play-link">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14.08.058.103.14.115.225.012.085.027.258.016.39-.075 1.042-.413 3.53-.559 4.739-.152 1.264-.504 1.684-.829 1.726-.33.043-.868-.18-1.35-.35-.48-.17-1.51-.558-2.17-.846-.66-.29-1.13-.434-1.09-.917.034-.48.605-.99 1.67-1.51 2.07-.93 2.9-1.27 3.16-1.39.26-.12.42-.1.56.03.14.14.18.33.2.47.02.14.07.45.04.69z"/></svg>
+          Играть в Telegram
+        </a>
+      </div>
+    </header>
+
+    <section class="section">
+      <h2 class="section-title">Как начать</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">Нажми кнопку «Играть в Telegram»</div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">Откроется бот — нажми Start или напиши /start</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">Играй с телефона или ПК — прогресс один</div>
+        </div>
+      </div>
+
+      <h2 class="section-title">Что внутри игры</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🪐</div>
+          <div class="feature-title">Планета</div>
+          <div class="feature-desc">Поиск, бои, арена, торговля и аукцион — классический MMO-геймплей на карте.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🚀</div>
+          <div class="feature-title">Космос</div>
+          <div class="feature-desc">Чертежи кораблей, соло и альянсовые экспедиции, постройка и улучшение флота.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⚔️</div>
+          <div class="feature-title">Альянсы</div>
+          <div class="feature-desc">Рейды на заводы и боссов, захват территорий, неделя сражений и общая казна.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📱</div>
+          <div class="feature-title">Всё в Telegram</div>
+          <div class="feature-desc">Один аккаунт, никаких отдельных установок — заходи из мессенджера когда удобно.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-section">
+      <h2 class="section-title">Готов начать?</h2>
+      <p class="cta-text">Откроется Telegram. Напиши боту /start — и ты уже в игре.</p>
+      <a href="https://t.me/SpacetextworldBot" class="btn-play" id="play-link-bottom">Играть в Telegram</a>
+    </section>
+
+    <footer>© Space Text World · MMO в Telegram</footer>
+  </div>
+
+  <script>
+    (function() {
+      var url = 'https://t.me/SpacetextworldBot';
+      document.getElementById('play-link').href = url;
+      document.getElementById('play-link-bottom').href = url;
+    })();
+  </script>
+</body>
+</html>
