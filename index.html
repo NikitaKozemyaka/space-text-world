@@ -71,19 +71,6 @@
       animation: twinkle 6s ease-in-out infinite;
       opacity: 0.7;
     }
-    .stars-main {
-      opacity: 0.7;
-    }
-    .stars-far {
-      opacity: 0.35;
-      transform: scale(1.1);
-      animation-duration: 14s;
-    }
-    .stars-near {
-      opacity: 0.95;
-      transform: scale(0.9);
-      animation-duration: 9s;
-    }
     .stars::after {
       content: '';
       position: absolute;
@@ -104,51 +91,6 @@
       50% { opacity: 1; }
     }
 
-    /* Метеоры */
-    .meteors {
-      position: absolute;
-      inset: 0;
-      overflow: hidden;
-    }
-    .meteor {
-      position: absolute;
-      width: 180px;
-      height: 3px;
-      background: linear-gradient(90deg, rgba(0,212,255,0.9), rgba(255,255,255,1), rgba(255,255,255,0));
-      opacity: 0;
-      transform: translate3d(0,0,0) rotate(35deg);
-      box-shadow: 0 0 18px rgba(56,189,248,0.9);
-      animation: meteor 9s linear infinite;
-    }
-    .meteor:nth-child(1) { top: 10%; left: 110%; animation-delay: 0s; }
-    .meteor:nth-child(2) { top: 45%; left: 115%; animation-delay: 3.5s; }
-    .meteor:nth-child(3) { top: 78%; left: 120%; animation-delay: 6.5s; }
-    @keyframes meteor {
-      0% { transform: translate3d(0,0,0) rotate(35deg); opacity: 0; }
-      8% { opacity: 1; }
-      45% { opacity: 0; }
-      100% { transform: translate3d(-210%, 110%, 0) rotate(35deg); opacity: 0; }
-    }
-
-    /* Прогресс-бар скролла */
-    .scroll-progress {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 3px;
-      background: linear-gradient(90deg, rgba(15,23,42,0.7), transparent);
-      z-index: 20;
-      pointer-events: none;
-    }
-    .scroll-progress-bar {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, var(--accent), var(--accent-warm));
-      box-shadow: 0 0 8px rgba(0,212,255,0.8);
-      transform-origin: left center;
-    }
-
     .wrap {
       position: relative;
       z-index: 1;
@@ -166,12 +108,6 @@
       align-items: center;
       text-align: center;
       padding: 4rem 0 3rem;
-    }
-    .hero-inner {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
     }
     .hero-badge {
       font-size: 0.75rem;
@@ -197,54 +133,6 @@
       margin-bottom: 0.75rem;
       opacity: 0;
       animation: fadeUp 0.8s ease 0.1s forwards;
-    }
-    .logo {
-      position: relative;
-      display: inline-block;
-      padding-inline: 0.2em;
-      animation: logoGlow 20s linear infinite;
-    }
-    .logo-orbit {
-      position: relative;
-      display: inline-block;
-    }
-    .satellite {
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: radial-gradient(circle, #fff 0%, var(--accent) 60%, transparent 100%);
-      box-shadow: 0 0 10px rgba(0,212,255,0.7);
-      opacity: 0.8;
-    }
-    .satellite-orbit {
-      position: absolute;
-      inset: -22px -40px;
-      border-radius: 999px;
-      border: 1px dashed rgba(148, 163, 184, 0.2);
-      pointer-events: none;
-    }
-    .satellite-1,
-    .satellite-2 {
-      top: 50%;
-      left: 50%;
-      transform-origin: -38px -6px;
-      animation: orbit 32s linear infinite;
-    }
-    .satellite-2 {
-      transform-origin: 30px 10px;
-      animation-duration: 26s;
-      animation-direction: reverse;
-      opacity: 0.6;
-    }
-    @keyframes logoGlow {
-      0% { background-position: 0% 50%; text-shadow: 0 0 12px rgba(0,212,255,0.5); }
-      50% { background-position: 100% 50%; text-shadow: 0 0 22px rgba(167,139,250,0.7); }
-      100% { background-position: 0% 50%; text-shadow: 0 0 12px rgba(0,212,255,0.5); }
-    }
-    @keyframes orbit {
-      0% { transform: rotate(0deg) translateX(0); }
-      100% { transform: rotate(360deg) translateX(0); }
     }
     .tagline {
       font-size: clamp(1rem, 2.5vw, 1.2rem);
@@ -296,8 +184,6 @@
       border-radius: 8px;
       box-shadow: 0 0 28px var(--accent-soft), 0 4px 14px rgba(0,0,0,0.3);
       transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
-      position: relative;
-      overflow: hidden;
     }
     .btn-play:hover {
       transform: translateY(-2px) scale(1.02);
@@ -306,48 +192,6 @@
     }
     .btn-play:active {
       transform: translateY(0) scale(0.98);
-    }
-    .btn-play::after {
-      content: '';
-      position: absolute;
-      inset: -40%;
-      background: radial-gradient(circle at 0% 50%, rgba(255,255,255,0.25), transparent 60%);
-      transform: translateX(-120%);
-      opacity: 0;
-    }
-    .btn-play--pulse {
-      animation: btnPulse 8s ease-in-out infinite;
-    }
-    .btn-play--pulse:hover {
-      animation-play-state: paused;
-    }
-    @keyframes btnPulse {
-      0%, 60%, 100% {
-        box-shadow: 0 0 28px var(--accent-soft), 0 4px 14px rgba(0,0,0,0.3);
-      }
-      62%, 68% {
-        box-shadow: 0 0 45px rgba(0,212,255,0.6), 0 8px 24px rgba(0,0,0,0.5);
-      }
-    }
-    .btn-play-animated::after {
-      animation: btnSweep 4.5s ease-in-out infinite;
-    }
-    @keyframes btnSweep {
-      0%, 40% {
-        transform: translateX(-120%);
-        opacity: 0;
-      }
-      45% {
-        opacity: 1;
-      }
-      60% {
-        transform: translateX(40%);
-        opacity: 0;
-      }
-      100% {
-        transform: translateX(40%);
-        opacity: 0;
-      }
     }
     .btn-play svg {
       width: 22px;
@@ -368,21 +212,6 @@
       color: var(--accent);
       text-align: center;
       margin-bottom: 2rem;
-    }
-    .section .section-title {
-      position: relative;
-      display: inline-block;
-    }
-    .section .section-title::after {
-      content: '';
-      position: absolute;
-      left: 50%;
-      bottom: -0.6rem;
-      width: 56%;
-      height: 1px;
-      transform: translateX(-50%);
-      background: linear-gradient(90deg, transparent, rgba(0,212,255,0.8), transparent);
-      opacity: 0.65;
     }
     .steps {
       display: grid;
@@ -486,133 +315,32 @@
       opacity: 0.9;
     }
 
-    /* Частицы вокруг нижнего CTA */
-    .cta-particles {
-      position: absolute;
-      inset: -10px;
-      pointer-events: none;
-      overflow: hidden;
-    }
-    .cta-particle {
-      position: absolute;
-      width: 3px;
-      height: 3px;
-      border-radius: 999px;
-      background: rgba(226, 232, 240, 0.7);
-      box-shadow: 0 0 6px rgba(148, 163, 184, 0.8);
-      opacity: 0;
-      animation: floatUp 11s linear infinite;
-    }
-    .cta-particle:nth-child(1) { left: 10%; animation-delay: 0s; }
-    .cta-particle:nth-child(2) { left: 28%; animation-delay: 2.5s; }
-    .cta-particle:nth-child(3) { left: 52%; animation-delay: 5s; }
-    .cta-particle:nth-child(4) { left: 74%; animation-delay: 1.5s; }
-    .cta-particle:nth-child(5) { left: 90%; animation-delay: 7s; }
-    @keyframes floatUp {
-      0% { transform: translateY(18px); opacity: 0; }
-      12% { opacity: 0.8; }
-      60% { opacity: 0.2; }
-      100% { transform: translateY(-120px); opacity: 0; }
-    }
-
-    /* Анимации появления при скролле */
-    .reveal {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.7s ease-out, transform 0.7s ease-out;
-    }
-    .reveal-visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* Hover-анимации иконок фич */
-    .feature-card {
-      position: relative;
-      overflow: hidden;
-    }
-    .feature-card::before {
-      content: '';
-      position: absolute;
-      inset: -40%;
-      background: radial-gradient(circle, rgba(56,189,248,0.08), transparent 60%);
-      opacity: 0;
-      transform: scale(0.7);
-      transition: opacity 0.25s ease, transform 0.25s ease;
-      pointer-events: none;
-    }
-    .feature-card:hover::before {
-      opacity: 1;
-      transform: scale(1);
-    }
-    .feature-icon {
-      transition: transform 0.3s ease;
-    }
-    .feature-card:hover .feature-icon {
-      transform: translateY(-2px) scale(1.08) rotate(-3deg);
-    }
-
-    /* Мягкое \"дыхание\" главного фона в hero */
-    .hero-breath {
-      animation: heroBreath 26s ease-in-out infinite;
-      transform-origin: center center;
-    }
-    @keyframes heroBreath {
-      0%, 100% { transform: scale(1); filter: brightness(1); }
-      50% { transform: scale(1.03); filter: brightness(1.06); }
-    }
-
-    /* Уважение к prefers-reduced-motion (без выключения всех анимаций) */
-    @media (prefers-reduced-motion: reduce) {
-      html {
-        scroll-behavior: auto;
-      }
-      .scroll-progress {
-        display: none;
-      }
-    }
+    /* (специальных настроек для prefers-reduced-motion нет — используются базовые анимации текста) */
   </style>
 </head>
 <body>
-  <div class="scroll-progress">
-    <div class="scroll-progress-bar" id="scroll-progress-bar"></div>
-  </div>
   <div class="bg">
-    <div class="bg-gradient hero-breath"></div>
-    <div class="stars stars-far" data-parallax-layer="far"></div>
-    <div class="stars stars-main" data-parallax-layer="mid"></div>
-    <div class="stars stars-near" data-parallax-layer="near"></div>
-    <div class="meteors">
-      <div class="meteor"></div>
-      <div class="meteor"></div>
-      <div class="meteor"></div>
-    </div>
+    <div class="bg-gradient"></div>
+    <div class="stars"></div>
   </div>
 
   <div class="wrap">
-    <header class="hero reveal">
-      <div class="hero-inner">
-        <p class="hero-badge">Telegram · MMO</p>
-        <div class="logo-orbit">
-          <h1 class="logo">Space Text World</h1>
-          <div class="satellite-orbit"></div>
-          <span class="satellite satellite-1"></span>
-          <span class="satellite satellite-2"></span>
-        </div>
-      </div>
+    <header class="hero">
+      <p class="hero-badge">Telegram · MMO</p>
+      <h1 class="logo">Space Text World</h1>
       <p class="tagline">Новая MMO про космос</p>
       <p class="hero-desc">
         Исследуй живую планету, собирай редкие ресурсы, строй корабли и отправляйся в экспедиции — всё в одном постоянном онлайн-мире прямо в Telegram.
       </p>
       <div class="hero-cta">
-        <a href="https://t.me/SpacetextworldBot" class="btn-play btn-play--pulse btn-play-animated" id="play-link">
+        <a href="https://t.me/SpacetextworldBot" class="btn-play" id="play-link">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14.08.058.103.14.115.225.012.085.027.258.016.39-.075 1.042-.413 3.53-.559 4.739-.152 1.264-.504 1.684-.829 1.726-.33.043-.868-.18-1.35-.35-.48-.17-1.51-.558-2.17-.846-.66-.29-1.13-.434-1.09-.917.034-.48.605-.99 1.67-1.51 2.07-.93 2.9-1.27 3.16-1.39.26-.12.42-.1.56.03.14.14.18.33.2.47.02.14.07.45.04.69z"/></svg>
           Играть в Telegram
         </a>
       </div>
     </header>
 
-    <section class="section reveal">
+    <section class="section">
       <h2 class="section-title">Как начать</h2>
       <div class="steps">
         <div class="step">
@@ -654,17 +382,10 @@
       </div>
     </section>
 
-    <section class="cta-section reveal">
-      <div class="cta-particles">
-        <div class="cta-particle"></div>
-        <div class="cta-particle"></div>
-        <div class="cta-particle"></div>
-        <div class="cta-particle"></div>
-        <div class="cta-particle"></div>
-      </div>
+    <section class="cta-section">
       <h2 class="section-title">Готов начать?</h2>
       <p class="cta-text">Откроется Telegram. Пара нажатий — и ты уже в своей космической истории.</p>
-      <a href="https://t.me/SpacetextworldBot" class="btn-play btn-play--pulse btn-play-animated" id="play-link-bottom">Играть в Telegram</a>
+      <a href="https://t.me/SpacetextworldBot" class="btn-play" id="play-link-bottom">Играть в Telegram</a>
     </section>
 
     <footer>© Space Text World · MMO в Telegram</footer>
@@ -673,93 +394,8 @@
   <script>
     (function() {
       var url = 'https://t.me/SpacetextworldBot';
-      var topLink = document.getElementById('play-link');
-      var bottomLink = document.getElementById('play-link-bottom');
-      if (topLink) topLink.href = url;
-      if (bottomLink) bottomLink.href = url;
-
-      var reduceMotionQuery = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
-      var reduceMotion = reduceMotionQuery && reduceMotionQuery.matches;
-
-      // Прогресс-бар скролла
-      var progressBar = document.getElementById('scroll-progress-bar');
-      function updateScrollProgress() {
-        if (!progressBar) return;
-        var scrollTop = window.scrollY || window.pageYOffset;
-        var docHeight = document.documentElement.scrollHeight - window.innerHeight;
-        var progress = docHeight > 0 ? (scrollTop / docHeight) : 0;
-        progressBar.style.width = (progress * 100).toFixed(2) + '%';
-      }
-      window.addEventListener('scroll', updateScrollProgress, { passive: true });
-      updateScrollProgress();
-
-      // Анимации появления при скролле
-      var revealEls = document.querySelectorAll('.reveal');
-      if ('IntersectionObserver' in window && revealEls.length) {
-        var observer = new IntersectionObserver(function(entries) {
-          entries.forEach(function(entry) {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('reveal-visible');
-              observer.unobserve(entry.target);
-            }
-          });
-        }, { threshold: 0.15 });
-        revealEls.forEach(function(el) { observer.observe(el); });
-      } else {
-        // fallback
-        revealEls.forEach(function(el) { el.classList.add('reveal-visible'); });
-      }
-
-      // Параллакс фона
-      if (!reduceMotion) {
-        var layers = document.querySelectorAll('[data-parallax-layer]');
-        if (layers.length) {
-          var pointerFine = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
-          var targetX = 0, targetY = 0;
-          var currentX = 0, currentY = 0;
-
-          function onPointerMove(e) {
-            var x = pointerFine ? e.clientX : window.innerWidth / 2;
-            var y = pointerFine ? e.clientY : window.innerHeight / 2;
-            var centerX = window.innerWidth / 2;
-            var centerY = window.innerHeight / 2;
-            targetX = (x - centerX) / centerX;
-            targetY = (y - centerY) / centerY;
-          }
-
-          if (pointerFine) {
-            window.addEventListener('mousemove', onPointerMove, { passive: true });
-          } else {
-            window.addEventListener('scroll', function() {
-              var scrollRatio = (window.scrollY || window.pageYOffset) / (document.documentElement.scrollHeight - window.innerHeight || 1);
-              targetY = (scrollRatio - 0.5) * 0.6;
-            }, { passive: true });
-          }
-
-          function animateParallax() {
-            currentX += (targetX - currentX) * 0.04;
-            currentY += (targetY - currentY) * 0.04;
-            layers.forEach(function(layer) {
-              var depth = 0.0;
-              var type = layer.getAttribute('data-parallax-layer');
-              if (type === 'far') depth = 6;
-              else if (type === 'mid') depth = 10;
-              else if (type === 'near') depth = 14;
-              var translateX = -currentX * depth;
-              var translateY = -currentY * depth;
-              layer.style.transform = 'translate3d(' + translateX.toFixed(2) + 'px,' + translateY.toFixed(2) + 'px,0)';
-            });
-            requestAnimationFrame(animateParallax);
-          }
-          animateParallax();
-        }
-      }
-
-      if (reduceMotionQuery) {
-        reduceMotionQuery.addEventListener('change', function(event) {
-          reduceMotion = event.matches;
-        });
-      }
+      document.getElementById('play-link').href = url;
+      document.getElementById('play-link-bottom').href = url;
     })();
   </script>
 </body>
