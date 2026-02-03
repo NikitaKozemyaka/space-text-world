@@ -112,21 +112,22 @@
     }
     .meteor {
       position: absolute;
-      width: 120px;
-      height: 2px;
-      background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.6), rgba(0,212,255,0));
+      width: 180px;
+      height: 3px;
+      background: linear-gradient(90deg, rgba(0,212,255,0.9), rgba(255,255,255,1), rgba(255,255,255,0));
       opacity: 0;
-      transform: rotate(-35deg);
-      animation: meteor 8s linear infinite;
+      transform: translate3d(0,0,0) rotate(35deg);
+      box-shadow: 0 0 18px rgba(56,189,248,0.9);
+      animation: meteor 9s linear infinite;
     }
-    .meteor:nth-child(1) { top: 15%; left: -20%; animation-delay: 0s; }
-    .meteor:nth-child(2) { top: 60%; left: -25%; animation-delay: 3s; }
-    .meteor:nth-child(3) { top: 35%; left: -30%; animation-delay: 5.5s; }
+    .meteor:nth-child(1) { top: 10%; left: 110%; animation-delay: 0s; }
+    .meteor:nth-child(2) { top: 45%; left: 115%; animation-delay: 3.5s; }
+    .meteor:nth-child(3) { top: 78%; left: 120%; animation-delay: 6.5s; }
     @keyframes meteor {
-      0% { transform: translate3d(0,0,0) rotate(-35deg); opacity: 0; }
-      5% { opacity: 1; }
-      40% { opacity: 0; }
-      100% { transform: translate3d(160%,80%,0) rotate(-35deg); opacity: 0; }
+      0% { transform: translate3d(0,0,0) rotate(35deg); opacity: 0; }
+      8% { opacity: 1; }
+      45% { opacity: 0; }
+      100% { transform: translate3d(-210%, 110%, 0) rotate(35deg); opacity: 0; }
     }
 
     /* Прогресс-бар скролла */
@@ -561,13 +562,10 @@
       50% { transform: scale(1.03); filter: brightness(1.06); }
     }
 
-    /* Уважение к prefers-reduced-motion */
+    /* Уважение к prefers-reduced-motion (без выключения всех анимаций) */
     @media (prefers-reduced-motion: reduce) {
-      * {
+      html {
         scroll-behavior: auto;
-        animation-duration: 0.001ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.001ms !important;
       }
       .scroll-progress {
         display: none;
@@ -766,4 +764,3 @@
   </script>
 </body>
 </html>
-
