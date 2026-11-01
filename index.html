@@ -1,402 +1,91 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Space Text World — MMO про космос в Telegram</title>
-  <meta name="description" content="Новая Telegram MMO про космос: планета, экспедиции, корабли, альянсы. Играй прямо в мессенджере.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#070b16">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="description" content="Space Text World — браузерная космическая MMO в Telegram. Исследуй планету, добывай ресурсы, строй корабли, участвуй в экспедициях и сражайся вместе с альянсом.">
+  <meta name="author" content="Space Text World">
+  <meta name="application-name" content="Space Text World">
+  <link rel="canonical" href="https://space-text-world.vercel.app/">
+  <meta name="keywords" content="космическая игра, MMO в Telegram, игра про космос, космическая стратегия, онлайн игра про космос, игра без установки">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Space Text World — космическая MMO в Telegram">
+  <meta property="og:description" content="Исследуй планету, строй корабли и развивай свой альянс в постоянном онлайн-мире прямо в Telegram.">
+  <meta property="og:locale" content="ru_RU">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>Space Text World — космическая MMO в Telegram</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"VideoGame",
+    "name":"Space Text World",
+    "description":"Космическая MMO в Telegram с исследованием планеты, экспедициями, строительством кораблей и альянсами.",
+    "genre":["MMO","Стратегия","Космическая игра"],
+    "gamePlatform":"Telegram",
+    "applicationCategory":"Game",
+    "operatingSystem":"Any",
+    "inLanguage":"ru",
+    "url":"https://t.me/STWgame_bot",
+    "playMode":"MultiPlayer",
+    "offers":{"@type":"Offer","price":"0","priceCurrency":"RUB"}
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"FAQPage",
+    "mainEntity":[
+      {"@type":"Question","name":"Что такое Space Text World?","acceptedAnswer":{"@type":"Answer","text":"Это многопользовательская космическая игра в Telegram: исследование, ресурсы, корабли, экспедиции, торговля и альянсы в одном постоянном мире."}},
+      {"@type":"Question","name":"Нужно ли что-то устанавливать?","acceptedAnswer":{"@type":"Answer","text":"Нет. Игра запускается через Telegram-бота и доступна с телефона или ПК."}},
+      {"@type":"Question","name":"Можно ли играть вместе с друзьями?","acceptedAnswer":{"@type":"Answer","text":"Да. Игроки могут объединяться в альянсы, участвовать в рейдах и развиваться вместе."}}
+    ]
+  }
+  </script>
   <style>
-    :root {
-      --space-dark: #060a12;
-      --space-mid: #0d1220;
-      --space-card: rgba(18, 28, 45, 0.85);
-      --accent: #00d4ff;
-      --accent-warm: #a78bfa;
-      --accent-soft: rgba(0, 212, 255, 0.2);
-      --star: #e8f4fc;
-      --text: #e8eef5;
-      --text-muted: #8a9fb5;
-      --border: rgba(255, 255, 255, 0.06);
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: 'Exo 2', sans-serif;
-      background: var(--space-dark);
-      color: var(--text);
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    /* Фон: градиент + звёзды */
-    .bg {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-    }
-    .bg-gradient {
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0, 212, 255, 0.12) 0%, transparent 50%),
-        radial-gradient(ellipse 60% 40% at 80% 60%, rgba(167, 139, 250, 0.08) 0%, transparent 45%),
-        radial-gradient(ellipse 50% 30% at 20% 80%, rgba(0, 212, 255, 0.06) 0%, transparent 40%);
-    }
-    .stars {
-      position: absolute;
-      width: 200%;
-      height: 200%;
-      top: -50%;
-      left: -50%;
-      background-image:
-        radial-gradient(2px 2px at 20px 30px, var(--star), transparent),
-        radial-gradient(2px 2px at 60px 90px, rgba(255,255,255,0.7), transparent),
-        radial-gradient(1px 1px at 100px 50px, var(--star), transparent),
-        radial-gradient(2px 2px at 150px 120px, rgba(255,255,255,0.5), transparent),
-        radial-gradient(1px 1px at 200px 80px, var(--star), transparent);
-      background-size: 220px 220px;
-      animation: twinkle 6s ease-in-out infinite;
-      opacity: 0.7;
-    }
-    .stars::after {
-      content: '';
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      background-size: 280px 280px;
-      background-image:
-        radial-gradient(1px 1px at 50px 80px, var(--star), transparent),
-        radial-gradient(2px 2px at 180px 40px, rgba(255,255,255,0.6), transparent);
-      animation: twinkle 8s ease-in-out infinite reverse;
-      animation-delay: -2s;
-      opacity: 0.5;
-    }
-    @keyframes twinkle {
-      0%, 100% { opacity: 0.5; }
-      50% { opacity: 1; }
-    }
-
-    .wrap {
-      position: relative;
-      z-index: 1;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 0 1.5rem 4rem;
-    }
-
-    /* Hero */
-    .hero {
-      min-height: 85vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 4rem 0 3rem;
-    }
-    .hero-badge {
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 1.5rem;
-      opacity: 0;
-      animation: fadeUp 0.8s ease forwards;
-    }
-    .logo {
-      font-family: 'Orbitron', sans-serif;
-      font-size: clamp(2rem, 6vw, 3.2rem);
-      font-weight: 800;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      background: linear-gradient(135deg, #fff 0%, var(--accent) 40%, var(--accent-warm) 100%);
-      background-size: 200% auto;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 0.75rem;
-      opacity: 0;
-      animation: fadeUp 0.8s ease 0.1s forwards;
-    }
-    .tagline {
-      font-size: clamp(1rem, 2.5vw, 1.2rem);
-      font-weight: 300;
-      color: var(--text-muted);
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      margin-bottom: 2rem;
-      opacity: 0;
-      animation: fadeUp 0.8s ease 0.2s forwards;
-    }
-    .hero-desc {
-      font-size: 1.15rem;
-      line-height: 1.8;
-      color: var(--text);
-      max-width: 520px;
-      margin-bottom: 2.5rem;
-      opacity: 0;
-      animation: fadeUp 0.8s ease 0.3s forwards;
-    }
-    .hero-cta {
-      opacity: 0;
-      animation: fadeUp 0.8s ease 0.5s forwards;
-    }
-    @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* Кнопка CTA */
-    .btn-play {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.6rem;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 1.05rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-decoration: none;
-      color: var(--space-dark);
-      background: linear-gradient(135deg, var(--accent) 0%, #0ea5e9 100%);
-      padding: 1rem 2rem;
-      border-radius: 8px;
-      box-shadow: 0 0 28px var(--accent-soft), 0 4px 14px rgba(0,0,0,0.3);
-      transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
-    }
-    .btn-play:hover {
-      transform: translateY(-2px) scale(1.02);
-      box-shadow: 0 0 40px rgba(0, 212, 255, 0.4), 0 6px 20px rgba(0,0,0,0.35);
-      filter: brightness(1.05);
-    }
-    .btn-play:active {
-      transform: translateY(0) scale(0.98);
-    }
-    .btn-play svg {
-      width: 22px;
-      height: 22px;
-      fill: currentColor;
-    }
-
-    /* Секция: как играть */
-    .section {
-      padding: 3rem 0;
-    }
-    .section-title {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 1.1rem;
-      font-weight: 600;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--accent);
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-    .steps {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 3rem;
-    }
-    .step {
-      text-align: center;
-      padding: 1.5rem 1rem;
-      background: var(--space-card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      backdrop-filter: blur(8px);
-      transition: border-color 0.2s, transform 0.2s;
-    }
-    .step:hover {
-      border-color: rgba(0, 212, 255, 0.25);
-      transform: translateY(-2px);
-    }
-    .step-num {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--accent);
-      margin-bottom: 0.5rem;
-    }
-    .step-text {
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      line-height: 1.4;
-    }
-
-    /* Карточки фич */
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.25rem;
-      margin-bottom: 3rem;
-    }
-    .feature-card {
-      padding: 1.5rem;
-      background: var(--space-card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      backdrop-filter: blur(8px);
-      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
-    }
-    .feature-card:hover {
-      border-color: rgba(0, 212, 255, 0.2);
-      transform: translateY(-3px);
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
-    }
-    .feature-icon {
-      font-size: 2rem;
-      margin-bottom: 0.75rem;
-      line-height: 1;
-    }
-    .feature-title {
-      font-weight: 600;
-      font-size: 1.05rem;
-      color: var(--text);
-      margin-bottom: 0.35rem;
-    }
-    .feature-desc {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
-
-    /* Финальный CTA */
-    .cta-section {
-      text-align: center;
-      padding: 3rem 2rem;
-      background: linear-gradient(180deg, transparent 0%, rgba(0, 212, 255, 0.06) 50%, transparent 100%);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      margin-top: 2rem;
-    }
-    .cta-section .section-title {
-      margin-bottom: 0.75rem;
-    }
-    .cta-text {
-      font-size: 1rem;
-      color: var(--text-muted);
-      margin-bottom: 1.5rem;
-      max-width: 400px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .cta-section .btn-play {
-      font-size: 1.1rem;
-      padding: 1.1rem 2.2rem;
-    }
-
-    footer {
-      text-align: center;
-      padding: 2rem 0;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      opacity: 0.9;
-    }
-
-    /* (специальных настроек для prefers-reduced-motion нет — используются базовые анимации текста) */
+    :root{--bg:#070b16;--panel:rgba(15,24,42,.76);--panel-strong:#101b30;--line:rgba(181,211,255,.14);--text:#eef5ff;--muted:#9eacc2;--cyan:#55e6ff;--violet:#ad91ff;--green:#9dffca;--max:1120px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.65 'Exo 2',sans-serif;overflow-x:hidden}a{color:inherit}.bg{position:fixed;inset:0;z-index:-2;overflow:hidden;background:radial-gradient(circle at 80% 12%,rgba(84,79,190,.18),transparent 28%),radial-gradient(circle at 10% 70%,rgba(0,176,221,.1),transparent 26%),var(--bg)}.bg:before,.bg:after{content:"";position:absolute;width:1px;height:1px;background:#fff;box-shadow:12vw 14vh #fff,29vw 8vh #b4dfff,45vw 23vh #fff,63vw 11vh #fff,78vw 27vh #b4dfff,92vw 8vh #fff,6vw 46vh #fff,18vw 81vh #fff,36vw 66vh #b4dfff,51vw 91vh #fff,70vw 75vh #fff,88vw 59vh #b4dfff;opacity:.6}.bg:after{transform:scale(2);opacity:.22;filter:blur(1px)}.wrap{max-width:var(--max);margin:auto;padding:0 24px}.topbar{display:flex;align-items:center;justify-content:space-between;padding:22px 0}.brand{font:700 .9rem 'Orbitron',sans-serif;letter-spacing:.12em;text-transform:uppercase}.brand span{color:var(--cyan)}.nav{display:flex;gap:24px;color:var(--muted);font-size:.9rem}.nav a{text-decoration:none}.nav a:hover{color:var(--cyan)}.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:70px;align-items:center;min-height:650px;padding:70px 0 90px}.eyebrow{display:inline-flex;gap:9px;align-items:center;color:var(--green);font-size:.78rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase}.eyebrow:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 18px var(--green)}h1,h2,h3{font-family:'Orbitron',sans-serif;line-height:1.12}h1{font-size:clamp(2.7rem,6vw,5.7rem);letter-spacing:-.05em;margin:22px 0 24px;max-width:760px}h1 em{font-style:normal;color:var(--cyan)}.lead{font-size:1.2rem;color:var(--muted);max-width:630px;margin:0 0 32px}.actions{display:flex;flex-wrap:wrap;align-items:center;gap:16px}.btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 22px;border-radius:9px;text-decoration:none;font-weight:700;transition:.2s ease}.btn-primary{color:#06101c;background:var(--cyan);box-shadow:0 0 30px rgba(85,230,255,.22)}.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 42px rgba(85,230,255,.4)}.btn-ghost{border:1px solid var(--line);color:var(--text)}.btn-ghost:hover{border-color:var(--cyan);color:var(--cyan)}.hero-note{font-size:.85rem;color:var(--muted);margin-top:16px}.orbit{position:relative;min-height:430px;display:grid;place-items:center}.planet{width:min(31vw,310px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 32% 27%,#d6fdff 0 3%,transparent 4%),radial-gradient(circle at 32% 30%,#22546e 0 12%,transparent 13%),radial-gradient(circle at 62% 65%,#16627d 0 18%,transparent 19%),radial-gradient(circle at 52% 43%,#1b233e 0 43%,#0a1225 74%);box-shadow:inset -30px -18px 50px #02050e,0 0 50px rgba(55,216,255,.25)}.ring{position:absolute;width:min(46vw,450px);height:140px;border:1px solid rgba(85,230,255,.38);border-radius:50%;transform:rotate(-20deg);box-shadow:0 0 34px rgba(85,230,255,.12)}.satellite{position:absolute;top:14%;right:4%;padding:13px 16px;background:var(--panel);border:1px solid var(--line);border-radius:10px;backdrop-filter:blur(8px);font-size:.8rem;color:var(--muted)}.satellite strong{display:block;color:var(--green);font:600 .8rem 'Orbitron',sans-serif}.section{padding:85px 0;border-top:1px solid rgba(181,211,255,.08)}.section-head{display:flex;justify-content:space-between;gap:24px;align-items:end;margin-bottom:30px}.kicker{color:var(--cyan);font:600 .75rem 'Orbitron',sans-serif;letter-spacing:.14em;text-transform:uppercase}.section h2{font-size:clamp(1.8rem,4vw,3rem);margin:10px 0 0}.section-intro{color:var(--muted);max-width:480px;margin:0}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{background:linear-gradient(145deg,rgba(19,33,58,.9),rgba(10,17,31,.8));border:1px solid var(--line);border-radius:14px;padding:26px;min-height:210px}.card:hover{border-color:rgba(85,230,255,.5)}.card-index{color:var(--violet);font:700 .8rem 'Orbitron',sans-serif}.card h3{font-size:1.05rem;margin:24px 0 9px}.card p{margin:0;color:var(--muted);font-size:.95rem}.feature-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.feature{display:flex;gap:18px;padding:22px;border:1px solid var(--line);background:rgba(15,24,42,.62);border-radius:12px}.feature-mark{flex:0 0 42px;height:42px;display:grid;place-items:center;border:1px solid rgba(85,230,255,.35);border-radius:9px;color:var(--cyan);font:700 1rem 'Orbitron',sans-serif}.feature h3{font-size:1rem;margin:0 0 5px}.feature p{margin:0;color:var(--muted);font-size:.92rem}.faq{max-width:820px}.faq details{border-bottom:1px solid var(--line);padding:20px 0}.faq summary{cursor:pointer;font-weight:600;font-size:1.05rem}.faq p{color:var(--muted);max-width:700px;margin:13px 0 0}.final{position:relative;overflow:hidden;text-align:center;padding:76px 24px;border:1px solid rgba(85,230,255,.25);border-radius:18px;background:radial-gradient(circle at 50% 10%,rgba(85,230,255,.18),transparent 60%),rgba(11,19,34,.88)}.final h2{font-size:clamp(1.9rem,4vw,3.5rem);margin:0 0 16px}.final p{color:var(--muted);margin:0 auto 28px}.footer{display:flex;justify-content:space-between;gap:24px;padding:35px 0;color:var(--muted);font-size:.85rem}.footer a{color:var(--cyan);text-decoration:none}@media(max-width:760px){.nav{display:none}.hero{grid-template-columns:1fr;gap:20px;min-height:auto;padding:60px 0 70px}.orbit{min-height:310px;order:-1}.planet{width:230px}.ring{width:320px;height:100px}.satellite{top:4%;right:0}.section{padding:62px 0}.section-head{display:block}.section-intro{margin-top:14px}.grid,.feature-grid{grid-template-columns:1fr}.footer{display:block}.footer span{display:block;margin-top:8px}h1{font-size:clamp(2.5rem,13vw,4rem)}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn{transition:none}}
   </style>
 </head>
 <body>
-  <div class="bg">
-    <div class="bg-gradient"></div>
-    <div class="stars"></div>
-  </div>
-
+  <div class="bg" aria-hidden="true"></div>
   <div class="wrap">
-    <header class="hero">
-      <p class="hero-badge">Telegram · MMO</p>
-      <h1 class="logo">Space Text World</h1>
-      <p class="tagline">Новая MMO про космос</p>
-      <p class="hero-desc">
-        Исследуй живую планету, собирай редкие ресурсы, строй корабли и отправляйся в экспедиции — всё в одном постоянном онлайн-мире прямо в Telegram.
-      </p>
-      <div class="hero-cta">
-        <a href="https://t.me/SpacetextworldBot" class="btn-play" id="play-link">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14.08.058.103.14.115.225.012.085.027.258.016.39-.075 1.042-.413 3.53-.559 4.739-.152 1.264-.504 1.684-.829 1.726-.33.043-.868-.18-1.35-.35-.48-.17-1.51-.558-2.17-.846-.66-.29-1.13-.434-1.09-.917.034-.48.605-.99 1.67-1.51 2.07-.93 2.9-1.27 3.16-1.39.26-.12.42-.1.56.03.14.14.18.33.2.47.02.14.07.45.04.69z"/></svg>
-          Играть в Telegram
-        </a>
-      </div>
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Space Text World — на главную">SPACE <span>TEXT</span> WORLD</a>
+      <nav class="nav" aria-label="Основная навигация"><a href="#about">Об игре</a><a href="#features">Возможности</a><a href="#faq">FAQ</a></nav>
     </header>
 
-    <section class="section">
-      <h2 class="section-title">Как начать</h2>
-      <div class="steps">
-        <div class="step">
-          <div class="step-num">1</div>
-          <div class="step-text">Нажми кнопку «Играть в Telegram»</div>
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div>
+          <span class="eyebrow">Постоянный онлайн-мир · Telegram MMO</span>
+          <h1 id="hero-title">Твоя история начинается <em>с орбиты.</em></h1>
+          <p class="lead">Space Text World — космическая MMO в Telegram, где ты исследуешь планету, собираешь ресурсы, строишь флот и меняешь баланс сил вместе с другими игроками.</p>
+          <div class="actions"><a class="btn btn-primary" href="https://t.me/STWgame_bot">Начать играть в Telegram</a><a class="btn btn-ghost" href="#about">Узнать больше</a></div>
+          <p class="hero-note">Без установки · Телефон и ПК · Один аккаунт</p>
         </div>
-        <div class="step">
-          <div class="step-num">2</div>
-          <div class="step-text">Откроется бот — нажми Start или напиши /start</div>
-        </div>
-        <div class="step">
-          <div class="step-num">3</div>
-          <div class="step-text">Играй с телефона или ПК — прогресс один</div>
-        </div>
-      </div>
+        <div class="orbit" aria-label="Иллюстрация планеты и орбитальной станции" role="img"><div class="ring"></div><div class="planet"></div><div class="satellite"><strong>SECTOR 07</strong>Система активна</div></div>
+      </section>
 
-      <h2 class="section-title">Что внутри игры</h2>
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon">🪐</div>
-          <div class="feature-title">Планета</div>
-          <div class="feature-desc">Поиск, бои, арена, торговля и аукцион — классический MMO-геймплей на карте живой планеты с динамическими событиями.</div>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🚀</div>
-          <div class="feature-title">Космос</div>
-          <div class="feature-desc">Чертежи кораблей, соло и альянсовые экспедиции, постройка и улучшение флота ради редких ресурсов и трофеев.</div>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">⚔️</div>
-          <div class="feature-title">Альянсы</div>
-          <div class="feature-desc">Рейды на заводы и боссов, захват территорий, неделя сражений и общая казна — побеждаете и растёте вместе.</div>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">📱</div>
-          <div class="feature-title">Всё в Telegram</div>
-          <div class="feature-desc">Один аккаунт, никаких отдельных установок — заходи из мессенджера когда удобно, с телефона или ПК.</div>
-        </div>
-      </div>
-    </section>
+      <section class="section" id="about" aria-labelledby="about-title">
+        <div class="section-head"><div><span class="kicker">С чего начать</span><h2 id="about-title">Три шага до первой экспедиции</h2></div><p class="section-intro">Войди в игру за минуту и продолжай с того же места на любом устройстве.</p></div>
+        <div class="grid"><article class="card"><span class="card-index">01 / JOIN</span><h3>Открой бота</h3><p>Нажми кнопку старта и запусти Space Text World прямо в Telegram.</p></article><article class="card"><span class="card-index">02 / EXPLORE</span><h3>Исследуй мир</h3><p>Ищи ресурсы, выполняй задания, сражайся на арене и открывай новые зоны.</p></article><article class="card"><span class="card-index">03 / BUILD</span><h3>Собери свой флот</h3><p>Создавай корабли, отправляйся в экспедиции и развивай собственную стратегию.</p></article></div>
+      </section>
 
-    <section class="cta-section">
-      <h2 class="section-title">Готов начать?</h2>
-      <p class="cta-text">Откроется Telegram. Пара нажатий — и ты уже в своей космической истории.</p>
-      <a href="https://t.me/SpacetextworldBot" class="btn-play" id="play-link-bottom">Играть в Telegram</a>
-    </section>
+      <section class="section" id="features" aria-labelledby="features-title">
+        <div class="section-head"><div><span class="kicker">Игровая база</span><h2 id="features-title">Космос, который меняется вместе с тобой</h2></div><p class="section-intro">Не просто набор кнопок, а живой мир с экономикой, риском и командной игрой.</p></div>
+        <div class="feature-grid"><article class="feature"><div class="feature-mark">01</div><div><h3>Планета и ресурсы</h3><p>Добывай редкие материалы, торгуй на рынке и находи выгоду там, где другие видят риск.</p></div></article><article class="feature"><div class="feature-mark">02</div><div><h3>Корабли и экспедиции</h3><p>Собирай чертежи, улучшай флот и отправляйся за трофеями в одиночку или с союзниками.</p></div></article><article class="feature"><div class="feature-mark">03</div><div><h3>Альянсы и территории</h3><p>Создавай альянс, участвуй в рейдах и борись за контроль над ключевыми секторами.</p></div></article><article class="feature"><div class="feature-mark">04</div><div><h3>Игра без установки</h3><p>Один Telegram-аккаунт, быстрый вход и общий прогресс с телефона или компьютера.</p></div></article></div>
+      </section>
 
-    <footer>© Space Text World · MMO в Telegram</footer>
+      <section class="section" id="faq" aria-labelledby="faq-title"><div class="section-head"><div><span class="kicker">Частые вопросы</span><h2 id="faq-title">Перед стартом</h2></div></div><div class="faq"><details open><summary>Что такое Space Text World?</summary><p>Это многопользовательская космическая игра в Telegram: исследование, ресурсы, корабли, экспедиции, торговля и альянсы в одном постоянном мире.</p></details><details><summary>Нужно ли что-то устанавливать?</summary><p>Нет. Игра запускается через Telegram-бота и доступна с телефона или ПК.</p></details><details><summary>Можно ли играть вместе с друзьями?</summary><p>Да. Объединяйтесь в альянсы, участвуйте в рейдах и развивайтесь вместе.</p></details></div></section>
+
+      <section class="final" aria-labelledby="final-title"><h2 id="final-title">Готов занять свой сектор?</h2><p>Открой Telegram, выбери первую экспедицию и начни строить свою космическую историю.</p><a class="btn btn-primary" href="https://t.me/STWgame_bot">Играть бесплатно</a></section>
+    </main>
+    <footer class="footer"><span>© Space Text World · Космическая MMO в Telegram</span><a href="https://t.me/STWgame_bot">Открыть игру</a></footer>
   </div>
-
-  <script>
-    (function() {
-      var url = 'https://t.me/SpacetextworldBot';
-      document.getElementById('play-link').href = url;
-      document.getElementById('play-link-bottom').href = url;
-    })();
-  </script>
 </body>
 </html>
