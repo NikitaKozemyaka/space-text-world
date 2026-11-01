@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://space-text-world.vercel.app/sitemap.xml
